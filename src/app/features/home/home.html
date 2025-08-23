@@ -1,0 +1,47 @@
+<div class="container py-5">
+  <h1 class="mb-4">📚 Willkommen bei <span class="text-primary">Vocabix</span></h1>
+
+  <p class="lead">
+    Diese App hilft dir beim Erlernen und Trainieren von Vokabeln. Du kannst Wortpaare erfassen, sie üben und dich in einer Prüfung testen lassen.
+  </p>
+
+  <hr class="my-4" />
+
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">✍️ Erfassen</h5>
+          <p class="card-text">
+            Füge neue Wortpaare hinzu, bearbeite oder lösche bestehende. Die Liste wird im Browser gespeichert.
+          </p>
+          <a routerLink="/edit" class="btn btn-primary">Zur Erfassung</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">🎯 Trainieren</h5>
+          <p class="card-text">
+            Lass dich zufällig abfragen. Falsch beantwortete Wörter werden häufiger wiederholt.
+          </p>
+          <a routerLink="/train" class="btn btn-primary">Zum Training</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">📝 Prüfung</h5>
+          <p class="card-text">
+            Starte eine vollständige Prüfung. Statistiken zeigen dir am Ende deinen Lernerfolg.
+          </p>
+          <a routerLink="/exam" class="btn btn-primary">Zur Prüfung</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
