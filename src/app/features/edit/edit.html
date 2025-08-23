@@ -1,1 +1,46 @@
-<p>edit works!</p>
+<div class="container py-3">
+  <h2 class="mb-4">📘 Wortpaare erfassen</h2>
+
+  <form class="row g-3 mb-3" (ngSubmit)="save()">
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="Sprache 1" [(ngModel)]="word1" name="word1" required />
+    </div>
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="Sprache 2" [(ngModel)]="word2" name="word2" required />
+    </div>
+    <div class="col-md-2 d-grid">
+      <button type="submit" class="btn btn-primary">Speichern</button>
+    </div>
+  </form>
+
+  <div class="d-flex gap-2 mb-3">
+    <button class="btn btn-secondary" (click)="insertExampleData()">Beispieldaten einfüllen</button>
+    <button class="btn btn-warning" (click)="resetAll()">Alles zurücksetzen</button>
+  </div>
+
+  <div class="mb-2">
+    <strong>Sortieren nach:</strong>
+    <button class="btn btn-sm btn-outline-dark" (click)="sortBy(0)">Sprache 1</button>
+    <button class="btn btn-sm btn-outline-dark" (click)="sortBy(1)">Sprache 2</button>
+  </div>
+
+  <table class="table table-striped table-bordered">
+    <thead class="table-light">
+    <tr>
+      <th>Sprache 1</th>
+      <th>Sprache 2</th>
+      <th style="width:100px;">Aktionen</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let pair of wordPairs; let i = index">
+      <td>{{ pair[0] }}</td>
+      <td>{{ pair[1] }}</td>
+      <td>
+        <button class="btn btn-sm btn-outline-primary" (click)="edit(i)">✏️</button>
+        <button class="btn btn-sm btn-outline-danger" (click)="remove(i)">🗑️</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
