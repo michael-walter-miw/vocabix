@@ -1,0 +1,35 @@
+.train-container {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.train-title {
+  margin-bottom: 1.5rem;
+}
+
+.train-card {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.train-prompt-label {
+  margin-bottom: 0.5rem;
+}
+
+.train-prompt {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.train-input {
+  margin-bottom: 1rem;
+}
+
+.train-feedback {
+  margin-top: 1rem;
+}
