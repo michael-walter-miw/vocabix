@@ -1,0 +1,70 @@
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.home-title {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+
+  .highlight {
+    color: #0d6efd; // Bootstrap primary blue
+  }
+}
+
+.home-lead {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.home-divider {
+  margin: 2rem 0;
+}
+
+// === Flex layout ===
+.home-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: space-between;
+}
+
+// 3-column layout
+.home-card {
+  flex: 1 1 calc(33.333% - 1rem);
+  max-width: calc(33.333% - 1rem);
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.1);
+
+  .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+
+    .card-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-text {
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
+    }
+
+    .btn {
+      align-self: flex-start;
+    }
+  }
+}
+
+// Mobile fallback: full-width cards
+@media (max-width: 767px) {
+  .home-card {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+}

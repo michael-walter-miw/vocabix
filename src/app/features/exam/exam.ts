@@ -9,7 +9,8 @@ type Result = { question: string; expected: string; given: string; correct: bool
   selector: 'app-exam',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './exam.html'
+  templateUrl: './exam.html',
+  styleUrls: ['./exam.scss']
 })
 export class Exam implements OnInit {
   wordPairs: [string, string][] = [];

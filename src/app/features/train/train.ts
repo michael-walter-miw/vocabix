@@ -6,7 +6,8 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-train',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './train.html'
+  templateUrl: './train.html',
+  styleUrls: ['./train.scss']
 })
 export class Train implements OnInit {
   wordPairs: [string, string][] = [];
