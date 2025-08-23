@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { WordsRoutingModule } from './words-routing-module';
-import { Words } from './words';
+import { TrainRoutingModule } from './train-routing-module';
+import { Train } from './train';
 
 
 @NgModule({
   declarations: [
-    Words
+    Train
   ],
   imports: [
     CommonModule,
-    WordsRoutingModule
+    TrainRoutingModule
   ]
 })
-export class WordsModule { }
+export class TrainModule { }
