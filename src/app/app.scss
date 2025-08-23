@@ -1,0 +1,14 @@
+@use 'bootstrap/scss/bootstrap';
+
+.main-navbar {
+  @extend .navbar;
+  @extend .navbar-expand;
+  @extend .navbar-dark;
+  @extend .bg-dark;
+  @extend .px-3;
+}
+
+.main-content {
+  @extend .container;
+  @extend .py-3;
+}
