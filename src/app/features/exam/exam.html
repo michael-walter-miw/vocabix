@@ -1,43 +1,41 @@
-<div class="container py-4">
-  <h2 class="mb-4">📝 Prüfung</h2>
+<div class="exam-container">
+  <h2 class="exam-title">📝 Prüfung</h2>
 
-  <div *ngIf="wordPairs.length === 0">
+  <div *ngIf="wordPairs.length === 0" class="exam-warning">
     <div class="alert alert-warning">
       Keine Wortpaare gefunden. Bitte erfasse zuerst welche unter <a routerLink="/edit">Editieren</a>.
     </div>
   </div>
 
-  <div *ngIf="!finished && wordPairs.length > 0">
-    <div class="card p-3 mb-3">
-      <div class="mb-2">
-        <strong>Frage {{ currentIndex + 1 }} von {{ questions.length }}:</strong>
-      </div>
-
-      <div class="fs-4 mb-3">
-        <strong>{{ questions[currentIndex].prompt }}</strong>
-      </div>
-
-      <form (ngSubmit)="submit()">
-        <input
-          class="form-control mb-2"
-          [(ngModel)]="userInput"
-          name="answer"
-          placeholder="Antwort eingeben"
-          required
-        />
-        <button class="btn btn-primary" type="submit">Antwort prüfen</button>
-      </form>
+  <div *ngIf="!finished && wordPairs.length > 0" class="exam-question-card">
+    <div class="exam-question-header">
+      <strong>Frage {{ currentIndex + 1 }} von {{ questions.length }}:</strong>
     </div>
+
+    <div class="exam-question-prompt">
+      <strong>{{ questions[currentIndex].prompt }}</strong>
+    </div>
+
+    <form (ngSubmit)="submit()">
+      <input
+        class="form-control exam-input"
+        [(ngModel)]="userInput"
+        name="answer"
+        placeholder="Antwort eingeben"
+        required
+      />
+      <button class="btn btn-primary" type="submit">Antwort prüfen</button>
+    </form>
   </div>
 
-  <div *ngIf="finished" class="card p-4 bg-light">
+  <div *ngIf="finished" class="exam-results">
     <h4>📊 Ergebnis</h4>
     <p>
       Richtig: <strong>{{ correctCount }}</strong> von {{ total }} |
       Trefferquote: <strong>{{ percentage }}%</strong>
     </p>
 
-    <table class="table table-bordered mt-3">
+    <table class="table table-bordered exam-result-table">
       <thead class="table-light">
       <tr>
         <th>Frage</th>
@@ -60,7 +58,7 @@
       </tbody>
     </table>
 
-    <div class="d-flex gap-2 mt-3">
+    <div class="exam-actions">
       <button class="btn btn-secondary" (click)="restart()">Neu starten</button>
       <button class="btn btn-outline-primary" (click)="back()">Zurück zur Erfassung</button>
     </div>
