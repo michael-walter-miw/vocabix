@@ -1,24 +1,24 @@
-<div class="container py-3">
-  <h2 class="mb-4">📘 Wortpaare erfassen</h2>
+<div class="edit-container">
+  <h2 class="edit-title">📘 Wortpaare erfassen</h2>
 
-  <form class="row g-3 mb-3" (ngSubmit)="save()">
-    <div class="col-md-5">
+  <form class="edit-form" (ngSubmit)="save()">
+    <div class="edit-col">
       <input type="text" class="form-control" placeholder="Sprache 1" [(ngModel)]="word1" name="word1" required />
     </div>
-    <div class="col-md-5">
+    <div class="edit-col">
       <input type="text" class="form-control" placeholder="Sprache 2" [(ngModel)]="word2" name="word2" required />
     </div>
-    <div class="col-md-2 d-grid">
+    <div class="edit-col-button">
       <button type="submit" class="btn btn-primary">Speichern</button>
     </div>
   </form>
 
-  <div class="d-flex gap-2 mb-3">
+  <div class="edit-actions">
     <button class="btn btn-secondary" (click)="insertExampleData()">Beispieldaten einfüllen</button>
     <button class="btn btn-warning" (click)="resetAll()">Alles zurücksetzen</button>
   </div>
 
-  <div class="mb-2">
+  <div class="edit-sorting">
     <strong>Sortieren nach:</strong>
     <button class="btn btn-sm btn-outline-dark" (click)="sortBy(0)">Sprache 1</button>
     <button class="btn btn-sm btn-outline-dark" (click)="sortBy(1)">Sprache 2</button>

@@ -1,0 +1,40 @@
+.edit-container {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.edit-title {
+  margin-bottom: 1.5rem;
+}
+
+.edit-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  .form-control {
+    width: 100%;
+  }
+}
+
+.edit-col {
+  flex: 1 1 45%;
+}
+
+.edit-col-button {
+  flex: 1 1 10%;
+  display: grid;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.edit-sorting {
+  margin-bottom: 1rem;
+}
