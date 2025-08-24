@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { WordStorageService } from '../../services/word-storage.service';
+import {WordPair} from '../../models/word-pair';
 
 type Result = { question: string; expected: string; given: string; correct: boolean };
 
@@ -17,7 +18,7 @@ export class Exam implements OnInit {
   private readonly storage = inject(WordStorageService);
   private readonly router = inject(Router);
 
-  wordPairs: [string, string][] = [];
+  wordPairs: WordPair[] = [];
   questions: { prompt: string; answer: string }[] = [];
   currentIndex = 0;
 

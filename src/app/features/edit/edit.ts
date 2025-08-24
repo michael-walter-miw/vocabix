@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WordStorageService } from '../../services/word-storage.service';
+import {WordPair} from '../../models/word-pair';
 
 @Component({
   selector: 'app-edit',
@@ -16,14 +17,14 @@ export class Edit implements OnInit {
   word1 = '';
   word2 = '';
   editIndex: number | null = null;
-  wordPairs: [string, string][] = [];
+  wordPairs: WordPair[] = [];
 
   ngOnInit(): void {
     this.wordPairs = this.storage.load();
   }
 
   save(): void {
-    const trimmed = [this.word1.trim(), this.word2.trim()] as [string, string];
+    const trimmed = [this.word1.trim(), this.word2.trim()] as WordPair;
     if (!trimmed[0] || !trimmed[1]) return;
 
     if (this.editIndex !== null) {

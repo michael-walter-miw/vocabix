@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {WordPair} from '../models/word-pair';
 
 @Injectable({
   providedIn: 'root'
@@ -6,12 +7,12 @@ import { Injectable } from '@angular/core';
 export class WordStorageService {
   private readonly key = 'wordPairs';
 
-  load(): [string, string][] {
+  load(): WordPair[] {
     const data = localStorage.getItem(this.key);
     return data ? JSON.parse(data) : [];
   }
 
-  save(pairs: [string, string][]): void {
+  save(pairs: WordPair[]): void {
     localStorage.setItem(this.key, JSON.stringify(pairs));
   }
 

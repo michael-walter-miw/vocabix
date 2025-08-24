@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WordStorageService } from '../../services/word-storage.service';
+import {WordPair} from '../../models/word-pair';
 
 @Component({
   selector: 'app-train',
@@ -13,7 +14,7 @@ import { WordStorageService } from '../../services/word-storage.service';
 export class Train implements OnInit {
   private readonly storage = inject(WordStorageService);
 
-  wordPairs: [string, string][] = [];
+  wordPairs: WordPair[] = [];
   weights: number[] = [];
 
   current: { prompt: string; answer: string; direction: 'L1toL2' | 'L2toL1' } | null = null;
