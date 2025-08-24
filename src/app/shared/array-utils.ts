@@ -1,5 +1,6 @@
 import { WordPair } from '../models/word-pair';
 import { Question } from '../models/question';
+import {ExamQuestion} from '../models/exam-questions';
 
 export class ArrayUtils {
   static shuffle<T>(arr: T[]): T[] {
@@ -16,11 +17,15 @@ export class ArrayUtils {
     return weights.length - 1;
   }
 
-  static toShuffledQuestions(pairs: WordPair[]): Question[] {
-    return this.shuffle(pairs).map(([w1, w2]) =>
-      Math.random() < 0.5
-        ? { prompt: w1, answer: w2 }
-        : { prompt: w2, answer: w1 }
-    );
-  }
-}
+  static toShuffledQuestions(pairs: WordPair[]): ExamQuestion[] {
+    const shuffled = this.shuffle(pairs);
+    return shuffled.map(([w1, w2], index) => {
+      const direction = Math.random() < 0.5 ? 'L1toL2' : 'L2toL1';
+      return {
+        prompt: direction === 'L1toL2' ? w1 : w2,
+        answer: direction === 'L1toL2' ? w2 : w1,
+        index,
+        direction
+      };
+    });
+  }}

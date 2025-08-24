@@ -5,12 +5,12 @@ import { Router } from '@angular/router';
 
 import { WordStorageService } from '../../services/word-storage.service';
 import { WordPair } from '../../models/word-pair';
-import { Question } from '../../models/question';
 import { Result } from '../../models/result';
 
 import { ArrayUtils } from '../../shared/array-utils';
 import { EvaluationService } from '../../shared/evaluation.service';
 import { MathUtils } from '../../shared/math-utils';
+import {ExamQuestion} from '../../models/exam-questions';
 
 @Component({
   selector: 'app-exam',
@@ -24,12 +24,12 @@ export class Exam implements OnInit {
   private readonly router = inject(Router);
 
   wordPairs: WordPair[] = [];
-  questions: Question[] = [];
+  questions: ExamQuestion[] = [];
   results: Result[] = [];
 
-  currentIndex = 0;
-  userInput = '';
-  finished = false;
+  currentIndex: number = 0;
+  userInput: string = '';
+  finished: boolean = false;
 
   ngOnInit(): void {
     this.wordPairs = this.storage.load();
@@ -42,9 +42,9 @@ export class Exam implements OnInit {
   submit(): void {
     if (this.finished || this.currentIndex >= this.questions.length) return;
 
-    const q = this.questions[this.currentIndex];
-    const given = this.userInput.trim();
-    const correct = EvaluationService.isCorrect(q.answer, given);
+    const q: ExamQuestion = this.questions[this.currentIndex];
+    const given: string = this.userInput.trim();
+    const correct: boolean = EvaluationService.isCorrect(q.answer, given);
 
     this.results.push({
       question: q.prompt,
@@ -68,7 +68,7 @@ export class Exam implements OnInit {
   }
 
   back(): void {
-    this.router.navigateByUrl('/edit');
+    void this.router.navigateByUrl('/edit');
   }
 
   get total(): number {
