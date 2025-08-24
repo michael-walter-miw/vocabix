@@ -35,6 +35,14 @@ export class Exam implements OnInit, OnDestroy {
   userInput = '';
   finished = false;
 
+  duration: number = 2; // default in minutes
+  remainingSeconds: number = 0;
+  private timerId: any = null;
+
+  setDuration(minutes: number): void {
+    this.duration = minutes;
+  }
+
   examSize = selectedExamSize;
 
   setExamSize(size: '5' | '10' | 'all'): void {
@@ -47,19 +55,51 @@ export class Exam implements OnInit, OnDestroy {
    }
 
   startExam(): void {
-    const size = selectedExamSize();
-    const shuffled = ArrayUtils.toShuffledQuestions(this.wordPairs);
+    const shuffled: ExamQuestion[] = ArrayUtils.toShuffledQuestions(this.wordPairs);
+    const size = this.examSize();
 
-    this.questions = (size === 'all')
+    this.questions = size === 'all'
       ? shuffled
       : shuffled.slice(0, parseInt(size));
 
+    this.results = [];
+    this.currentIndex = 0;
+    this.userInput = '';
+    this.finished = false;
+
+    this.remainingSeconds = this.duration * 60;
+    this.startTimer();
+
+    this.ui.startExam();
     setTimeout(() => this.focusInput(), 0);
   }
 
+  startTimer(): void {
+    this.clearTimer();
+    this.timerId = setInterval(() => {
+      this.remainingSeconds--;
+      if (this.remainingSeconds <= 0) {
+        this.finishExam();
+      }
+    }, 1000);
+  }
+
+  clearTimer(): void {
+    if (this.timerId) {
+      clearInterval(this.timerId);
+      this.timerId = null;
+    }
+  }
 
   ngOnDestroy(): void {
-    this.ui.endExam(); // ✅ unlock navigation
+    this.clearTimer();
+    this.ui.endExam();
+  }
+
+  formatTime(seconds: number): string {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
   }
 
   submit(): void {
@@ -82,7 +122,16 @@ export class Exam implements OnInit, OnDestroy {
     }
   }
 
+  finishExam(): void {
+    this.finished = true;
+    this.clearTimer();
+    this.ui.endExam(); // ✅ unlock tabs when time is up
+  }
+
   restart(): void {
+    this.clearTimer();
+    this.startExam();
+
     this.results = [];
     this.currentIndex = 0;
     this.userInput = '';
@@ -97,7 +146,6 @@ export class Exam implements OnInit, OnDestroy {
     this.ui.startExam(); // 🔄 re-lock tabs
     setTimeout(() => this.focusInput(), 0);
   }
-
 
   back(): void {
     this.ui.endExam();
