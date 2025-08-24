@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 
 import { WordStorageService } from '../../services/word-storage.service';
 import { WordPair } from '../../models/word-pair';
-import { ArrayUtils } from '../../shared/array-utils';
 import { EvaluationService } from '../../shared/evaluation.service';
 import { WordTrainerService } from '../../services/word-trainer.service';
 

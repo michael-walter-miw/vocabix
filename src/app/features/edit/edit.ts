@@ -53,12 +53,7 @@ export class Edit implements OnInit {
   }
 
   insertExampleData(): void {
-    this.wordPairs = [
-      ['house', 'Haus'],
-      ['cat', 'Katze'],
-      ['book', 'Buch'],
-      ['sun', 'Sonne'],
-    ];
+    this.wordPairs = this.storage.getExampleData();
     this.persist();
   }
 

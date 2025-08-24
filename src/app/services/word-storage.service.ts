@@ -19,4 +19,13 @@ export class WordStorageService {
   clear(): void {
     localStorage.removeItem(this.key);
   }
+
+  getExampleData(): WordPair[] {
+    return [
+      ['house', 'Haus'],
+      ['cat', 'Katze'],
+      ['book', 'Buch'],
+      ['sun', 'Sonne'],
+    ];
+  }
 }

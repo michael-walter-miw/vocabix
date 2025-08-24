@@ -1,5 +1,4 @@
 import { WordPair } from '../models/word-pair';
-import { Question } from '../models/question';
 import {ExamQuestion} from '../models/exam-questions';
 
 export class ArrayUtils {
