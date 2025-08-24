@@ -13,6 +13,7 @@ import { ExamQuestion } from '../../models/exam-questions';
 import { ArrayUtils } from '../../shared/array-utils';
 import { EvaluationService } from '../../shared/evaluation.service';
 import { MathUtils } from '../../shared/math-utils';
+import { selectedExamSize } from '../../services/exam-settings.service';
 
 @Component({
   selector: 'app-exam',
@@ -34,15 +35,28 @@ export class Exam implements OnInit, OnDestroy {
   userInput = '';
   finished = false;
 
+  examSize = selectedExamSize;
+
+  setExamSize(size: '5' | '10' | 'all'): void {
+    selectedExamSize.set(size);
+  }
+
   ngOnInit(): void {
     this.ui.startExam(); // 🚨 lock navigation
-
     this.wordPairs = this.storage.load();
-    if (this.wordPairs.length === 0) return;
+   }
 
-    this.questions = ArrayUtils.toShuffledQuestions(this.wordPairs);
+  startExam(): void {
+    const size = selectedExamSize();
+    const shuffled = ArrayUtils.toShuffledQuestions(this.wordPairs);
+
+    this.questions = (size === 'all')
+      ? shuffled
+      : shuffled.slice(0, parseInt(size));
+
     setTimeout(() => this.focusInput(), 0);
   }
+
 
   ngOnDestroy(): void {
     this.ui.endExam(); // ✅ unlock navigation
@@ -70,16 +84,24 @@ export class Exam implements OnInit, OnDestroy {
 
   restart(): void {
     this.results = [];
-    this.questions = ArrayUtils.toShuffledQuestions(this.wordPairs);
     this.currentIndex = 0;
     this.userInput = '';
     this.finished = false;
+
+    const size = selectedExamSize();
+    const shuffled = ArrayUtils.toShuffledQuestions(this.wordPairs);
+    this.questions = (size === 'all')
+      ? shuffled
+      : shuffled.slice(0, parseInt(size));
+
     this.ui.startExam(); // 🔄 re-lock tabs
     setTimeout(() => this.focusInput(), 0);
   }
 
+
   back(): void {
     this.ui.endExam();
+    this.userInput = '';
     void this.router.navigateByUrl('/edit');
   }
 

@@ -10,7 +10,35 @@
     </div>
   }
 
-  @if (!finished && wordPairs.length > 0) {
+  @if (!questions.length && wordPairs.length > 0) {
+    <div class="exam-options mb-4">
+      <label class="form-label"><strong>Wie viele Wörter sollen geprüft werden?</strong></label>
+
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="examSize" id="size5" value="5"
+               [checked]="examSize() === '5'" (change)="setExamSize('5')"/>
+        <label class="form-check-label" for="size5">5</label>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="examSize" id="size10" value="10"
+               [checked]="examSize() === '10'" (change)="setExamSize('10')"/>
+        <label class="form-check-label" for="size10">10</label>
+      </div>
+
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="examSize" id="sizeAll" value="all"
+               [checked]="examSize() === 'all'" (change)="setExamSize('all')"/>
+        <label class="form-check-label" for="sizeAll">Alle</label>
+      </div>
+
+      <button class="btn btn-primary mt-3" (click)="startExam()">
+        Prüfung starten
+      </button>
+    </div>
+  }
+
+  @if (!finished && questions.length > 0) {
     <div class="exam-question-card">
       <div class="exam-question-header">
         <strong>Frage {{ currentIndex + 1 }} von {{ questions.length }}:</strong>
@@ -31,7 +59,9 @@
           required
           data-testid="answer-input"
         />
-        <small id="hint-{{ currentIndex }}" class="form-text text-muted">Bitte die Übersetzung eingeben</small>
+        <small id="hint-{{ currentIndex }}" class="form-text text-muted">
+          Bitte die Übersetzung eingeben
+        </small>
         <button
           class="btn btn-primary mt-2"
           type="submit"
