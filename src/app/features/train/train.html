@@ -1,38 +1,53 @@
 <div class="train-container">
   <h2 class="train-title">🎯 Trainieren</h2>
 
-  <div *ngIf="current; else emptyState">
+  @if (current) {
     <div class="train-card">
-      <h5 class="train-prompt-label">Übersetze:</h5>
-      <div class="train-prompt">
+      <h5 class="train-prompt-label" id="prompt-label">Übersetze:</h5>
+
+      <div class="train-prompt" aria-labelledby="prompt-label" data-testid="train-prompt">
         <strong>{{ current.prompt }}</strong>
       </div>
 
-      <form (ngSubmit)="check()">
+      <form (ngSubmit)="check()" aria-label="Trainingsantwort überprüfen">
         <div class="train-input">
           <input
             class="form-control"
             [(ngModel)]="userInput"
             name="answer"
             placeholder="Deine Antwort"
+            aria-label="Antwort eingeben"
             required
+            [disabled]="feedback !== null"
+            data-testid="train-answer-input"
           />
         </div>
-        <button type="submit" class="btn btn-primary" [disabled]="feedback">Prüfen</button>
+        <button
+          type="submit"
+          class="btn btn-primary mt-2"
+          [disabled]="feedback !== null"
+          data-testid="train-submit-button"
+        >
+          Prüfen
+        </button>
       </form>
 
-      <div class="train-feedback">
-        <div *ngIf="feedback === 'correct'" class="alert alert-success">✅ Richtig!</div>
-        <div *ngIf="feedback === 'wrong'" class="alert alert-danger">
-          ❌ Falsch. Richtig wäre: <strong>{{ correctAnswer }}</strong>
-        </div>
+      <div class="train-feedback" role="status" aria-live="polite" data-testid="train-feedback">
+        @if (feedback === 'correct') {
+          <div class="alert alert-success">✅ Richtig!</div>
+        } @else if (feedback === 'wrong') {
+          <div class="alert alert-danger">
+            ❌ Falsch. Richtig wäre: <strong>{{ correctAnswer }}</strong>
+          </div>
+        }
       </div>
     </div>
-  </div>
+  }
 
-  <ng-template #emptyState>
-    <div class="alert alert-warning">
-      Keine Wortpaare gefunden. Bitte erfasse zuerst welche unter <a routerLink="/edit">Editieren</a>.
+  @else {
+    <div class="alert alert-warning" role="alert" data-testid="train-empty">
+      Keine Wortpaare gefunden. Bitte erfasse zuerst welche unter
+      <a routerLink="/edit">Editieren</a>.
     </div>
-  </ng-template>
+  }
 </div>
