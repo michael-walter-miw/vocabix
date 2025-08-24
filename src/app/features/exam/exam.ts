@@ -1,15 +1,16 @@
-import {Component, OnInit, inject} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
-import {WordStorageService} from '../../services/word-storage.service';
-import {WordPair} from '../../models/word-pair';
-import {ArrayUtils} from '../../shared/array-utils';
-import {EvaluationService} from '../../shared/evaluation.service';
-import {Question} from '../../models/question';
-import {MathUtils} from '../../shared/math-utils';
+import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
-type Result = { question: string; expected: string; given: string; correct: boolean };
+import { WordStorageService } from '../../services/word-storage.service';
+import { WordPair } from '../../models/word-pair';
+import { Question } from '../../models/question';
+import { Result } from '../../models/result';
+
+import { ArrayUtils } from '../../shared/array-utils';
+import { EvaluationService } from '../../shared/evaluation.service';
+import { MathUtils } from '../../shared/math-utils';
 
 @Component({
   selector: 'app-exam',
@@ -24,10 +25,11 @@ export class Exam implements OnInit {
 
   wordPairs: WordPair[] = [];
   questions: Question[] = [];
+  results: Result[] = [];
+
   currentIndex = 0;
   userInput = '';
   finished = false;
-  results: Result[] = [];
 
   ngOnInit(): void {
     this.wordPairs = this.storage.load();
@@ -38,9 +40,12 @@ export class Exam implements OnInit {
   }
 
   submit(): void {
+    if (this.finished || this.currentIndex >= this.questions.length) return;
+
     const q = this.questions[this.currentIndex];
     const given = this.userInput.trim();
     const correct = EvaluationService.isCorrect(q.answer, given);
+
     this.results.push({
       question: q.prompt,
       expected: q.answer,
@@ -51,28 +56,30 @@ export class Exam implements OnInit {
     this.userInput = '';
     this.currentIndex++;
 
-    if (this.currentIndex >= this.questions.length) {
-      this.finished = true;
-    }
+    this.finished = this.currentIndex >= this.questions.length;
   }
 
   restart(): void {
-    this.router.navigateByUrl('/exam'); // reload component
+    this.results = [];
+    this.questions = ArrayUtils.toShuffledQuestions(this.wordPairs);
+    this.currentIndex = 0;
+    this.userInput = '';
+    this.finished = false;
   }
 
   back(): void {
     this.router.navigateByUrl('/edit');
   }
 
-  get total() {
+  get total(): number {
     return this.results.length;
   }
 
-  get correctCount() {
+  get correctCount(): number {
     return this.results.filter(r => r.correct).length;
   }
 
-  get percentage() {
+  get percentage(): number {
     return MathUtils.percentage(this.correctCount, this.total);
   }
 }
