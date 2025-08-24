@@ -6,11 +6,11 @@ import { Router } from '@angular/router';
 import { WordStorageService } from '../../services/word-storage.service';
 import { WordPair } from '../../models/word-pair';
 import { Result } from '../../models/result';
+import { ExamQuestion } from '../../models/exam-questions';
 
 import { ArrayUtils } from '../../shared/array-utils';
 import { EvaluationService } from '../../shared/evaluation.service';
 import { MathUtils } from '../../shared/math-utils';
-import {ExamQuestion} from '../../models/exam-questions';
 
 @Component({
   selector: 'app-exam',
@@ -33,30 +33,28 @@ export class Exam implements OnInit {
 
   ngOnInit(): void {
     this.wordPairs = this.storage.load();
-
     if (this.wordPairs.length === 0) return;
 
     this.questions = ArrayUtils.toShuffledQuestions(this.wordPairs);
+    setTimeout(() => this.focusInput(), 0); // auto-focus
   }
 
   submit(): void {
     if (this.finished || this.currentIndex >= this.questions.length) return;
 
-    const q: ExamQuestion = this.questions[this.currentIndex];
-    const given: string = this.userInput.trim();
-    const correct: boolean = EvaluationService.isCorrect(q.answer, given);
+    const q = this.questions[this.currentIndex];
+    const given = this.userInput.trim();
+    const correct = EvaluationService.isCorrect(q.answer, given);
 
-    this.results.push({
-      question: q.prompt,
-      expected: q.answer,
-      given,
-      correct
-    });
+    this.results.push({ question: q.prompt, expected: q.answer, given, correct });
 
     this.userInput = '';
     this.currentIndex++;
-
     this.finished = this.currentIndex >= this.questions.length;
+
+    if (!this.finished) {
+      setTimeout(() => this.focusInput(), 0); // re-focus next input
+    }
   }
 
   restart(): void {
@@ -65,6 +63,7 @@ export class Exam implements OnInit {
     this.currentIndex = 0;
     this.userInput = '';
     this.finished = false;
+    setTimeout(() => this.focusInput(), 0);
   }
 
   back(): void {
@@ -81,5 +80,18 @@ export class Exam implements OnInit {
 
   get percentage(): number {
     return MathUtils.percentage(this.correctCount, this.total);
+  }
+
+  getIcon(correct: boolean): string {
+    return correct ? '✔️' : '❌';
+  }
+
+  getRowClass(correct: boolean): string {
+    return correct ? 'table-success' : 'table-danger';
+  }
+
+  focusInput(): void {
+    const input = document.querySelector<HTMLInputElement>('[data-testid="answer-input"]');
+    input?.focus();
   }
 }

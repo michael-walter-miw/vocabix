@@ -2,7 +2,7 @@
   <h2 class="exam-title">📝 Prüfung</h2>
 
   @if (wordPairs.length === 0) {
-    <div class="exam-warning">
+    <div class="exam-warning" role="alert">
       <div class="alert alert-warning">
         Keine Wortpaare gefunden. Bitte erfasse zuerst welche unter
         <a routerLink="/edit">Editieren</a>.
@@ -20,21 +20,43 @@
         <strong>{{ questions[currentIndex].prompt }}</strong>
       </div>
 
-      <form (ngSubmit)="submit()">
+      <form (ngSubmit)="submit()" aria-label="Frage beantworten">
         <input
           class="form-control exam-input"
           [(ngModel)]="userInput"
           name="answer"
           placeholder="Antwort eingeben"
+          aria-label="Antwort eingeben"
+          [attr.aria-describedby]="'hint-' + currentIndex"
           required
+          data-testid="answer-input"
         />
-        <button class="btn btn-primary" type="submit">Antwort prüfen</button>
+        <small id="hint-{{ currentIndex }}" class="form-text text-muted">Bitte die Übersetzung eingeben</small>
+        <button
+          class="btn btn-primary mt-2"
+          type="submit"
+          [disabled]="!userInput.trim()"
+          data-testid="submit-button"
+        >
+          Antwort prüfen
+        </button>
       </form>
+
+      <div class="progress my-3" style="height: 10px">
+        <div
+          class="progress-bar"
+          role="progressbar"
+          [style.width.%]="percentage"
+          aria-valuenow="{{ percentage }}"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        ></div>
+      </div>
     </div>
   }
 
   @if (finished) {
-    <div class="exam-results">
+    <div class="exam-results" aria-live="polite">
       <h4>📊 Ergebnis</h4>
       <p>
         Richtig: <strong>{{ correctCount }}</strong> von {{ total }} |
@@ -52,13 +74,13 @@
         </thead>
         <tbody>
           @for (r of results; track r) {
-            <tr>
+            <tr [ngClass]="getRowClass(r.correct)" data-testid="result-row">
               <td>{{ r.question }}</td>
               <td>{{ r.expected }}</td>
               <td>{{ r.given }}</td>
               <td>
                 <span [class.text-success]="r.correct" [class.text-danger]="!r.correct">
-                  {{ r.correct ? '✔️' : '❌' }}
+                  {{ getIcon(r.correct) }}
                 </span>
               </td>
             </tr>
@@ -67,8 +89,12 @@
       </table>
 
       <div class="exam-actions">
-        <button class="btn btn-secondary" (click)="restart()">Neu starten</button>
-        <button class="btn btn-outline-primary" (click)="back()">Zurück zur Erfassung</button>
+        <button class="btn btn-secondary" (click)="restart()" data-testid="restart-button">
+          Neu starten
+        </button>
+        <button class="btn btn-outline-primary" (click)="back()" data-testid="back-button">
+          Zurück zur Erfassung
+        </button>
       </div>
     </div>
   }
