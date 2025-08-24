@@ -1,9 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { WordStorageService } from '../../services/word-storage.service';
+import {Component, OnInit, inject} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {WordStorageService} from '../../services/word-storage.service';
 import {WordPair} from '../../models/word-pair';
 import {ArrayUtils} from '../../shared/array-utils';
+import {EvaluationService} from '../../shared/evaluation.service';
 
 @Component({
   selector: 'app-train',
@@ -53,10 +54,7 @@ export class Train implements OnInit {
   check(): void {
     if (!this.current) return;
 
-    const correct = this.current.answer.trim().toLowerCase();
-    const given = this.userInput.trim().toLowerCase();
-
-    if (given === correct) {
+    if (EvaluationService.isCorrect(this.current.answer, this.userInput)) {
       this.feedback = 'correct';
       this.correctAnswer = '';
     } else {

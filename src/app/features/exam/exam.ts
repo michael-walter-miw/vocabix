@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { WordStorageService } from '../../services/word-storage.service';
 import {WordPair} from '../../models/word-pair';
 import { ArrayUtils } from '../../shared/array-utils';
+import {EvaluationService} from '../../shared/evaluation.service';
 
 type Result = { question: string; expected: string; given: string; correct: boolean };
 
@@ -43,8 +44,7 @@ export class Exam implements OnInit {
   submit(): void {
     const q = this.questions[this.currentIndex];
     const given = this.userInput.trim();
-    const correct = q.answer.trim().toLowerCase() === given.toLowerCase();
-
+    const correct = EvaluationService.isCorrect(q.answer, given);
     this.results.push({
       question: q.prompt,
       expected: q.answer,
