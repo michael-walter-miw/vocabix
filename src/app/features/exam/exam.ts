@@ -1,11 +1,13 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { WordStorageService } from '../../services/word-storage.service';
+import {Component, OnInit, inject} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
+import {WordStorageService} from '../../services/word-storage.service';
 import {WordPair} from '../../models/word-pair';
-import { ArrayUtils } from '../../shared/array-utils';
+import {ArrayUtils} from '../../shared/array-utils';
 import {EvaluationService} from '../../shared/evaluation.service';
+import {Question} from '../../models/question';
+import {MathUtils} from '../../shared/math-utils';
 
 type Result = { question: string; expected: string; given: string; correct: boolean };
 
@@ -21,9 +23,8 @@ export class Exam implements OnInit {
   private readonly router = inject(Router);
 
   wordPairs: WordPair[] = [];
-  questions: { prompt: string; answer: string }[] = [];
+  questions: Question[] = [];
   currentIndex = 0;
-
   userInput = '';
   finished = false;
   results: Result[] = [];
@@ -33,12 +34,7 @@ export class Exam implements OnInit {
 
     if (this.wordPairs.length === 0) return;
 
-    const shuffled = ArrayUtils.shuffle(this.wordPairs);
-    this.questions = shuffled.map(([w1, w2]) =>
-      Math.random() < 0.5
-        ? { prompt: w1, answer: w2 }
-        : { prompt: w2, answer: w1 }
-    );
+    this.questions = ArrayUtils.toShuffledQuestions(this.wordPairs);
   }
 
   submit(): void {
@@ -77,6 +73,6 @@ export class Exam implements OnInit {
   }
 
   get percentage() {
-    return this.total > 0 ? Math.round((this.correctCount / this.total) * 100) : 0;
+    return MathUtils.percentage(this.correctCount, this.total);
   }
 }
