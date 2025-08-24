@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { WordStorageService } from '../../services/word-storage.service';
 
 type Result = { question: string; expected: string; given: string; correct: boolean };
 
@@ -13,6 +14,9 @@ type Result = { question: string; expected: string; given: string; correct: bool
   styleUrls: ['./exam.scss']
 })
 export class Exam implements OnInit {
+  private readonly storage = inject(WordStorageService);
+  private readonly router = inject(Router);
+
   wordPairs: [string, string][] = [];
   questions: { prompt: string; answer: string }[] = [];
   currentIndex = 0;
@@ -21,11 +25,8 @@ export class Exam implements OnInit {
   finished = false;
   results: Result[] = [];
 
-  constructor(private router: Router) {}
-
   ngOnInit(): void {
-    const saved = localStorage.getItem('wordPairs');
-    this.wordPairs = saved ? JSON.parse(saved) : [];
+    this.wordPairs = this.storage.load();
 
     if (this.wordPairs.length === 0) return;
 

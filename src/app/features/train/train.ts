@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { WordStorageService } from '../../services/word-storage.service';
 
 @Component({
   selector: 'app-train',
@@ -10,6 +11,8 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./train.scss']
 })
 export class Train implements OnInit {
+  private readonly storage = inject(WordStorageService);
+
   wordPairs: [string, string][] = [];
   weights: number[] = [];
 
@@ -19,8 +22,7 @@ export class Train implements OnInit {
   correctAnswer = '';
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('wordPairs');
-    this.wordPairs = saved ? JSON.parse(saved) : [];
+    this.wordPairs = this.storage.load();
     this.weights = Array(this.wordPairs.length).fill(1);
     this.next();
   }
@@ -59,7 +61,7 @@ export class Train implements OnInit {
       this.feedback = 'wrong';
       this.correctAnswer = this.current.answer;
 
-      // Bonus: increase weight for this word
+      // Optional: increase weight for this word
       const index = this.wordPairs.findIndex(p =>
         p.includes(this.current!.prompt) && p.includes(this.current!.answer)
       );

@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { WordStorageService } from '../../services/word-storage.service';
 
 @Component({
   selector: 'app-edit',
@@ -9,16 +10,16 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './edit.html',
   styleUrls: ['./edit.scss']
 })
-
 export class Edit implements OnInit {
+  private readonly storage = inject(WordStorageService);
+
   word1 = '';
   word2 = '';
   editIndex: number | null = null;
   wordPairs: [string, string][] = [];
 
   ngOnInit(): void {
-    const saved = localStorage.getItem('wordPairs');
-    this.wordPairs = saved ? JSON.parse(saved) : [];
+    this.wordPairs = this.storage.load();
   }
 
   save(): void {
@@ -68,7 +69,7 @@ export class Edit implements OnInit {
   }
 
   persist(): void {
-    localStorage.setItem('wordPairs', JSON.stringify(this.wordPairs));
+    this.storage.save(this.wordPairs);
   }
 
   resetForm(): void {
