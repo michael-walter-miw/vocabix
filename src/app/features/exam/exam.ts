@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { WordStorageService } from '../../services/word-storage.service';
 import {WordPair} from '../../models/word-pair';
+import { ArrayUtils } from '../../shared/array-utils';
 
 type Result = { question: string; expected: string; given: string; correct: boolean };
 
@@ -31,7 +32,7 @@ export class Exam implements OnInit {
 
     if (this.wordPairs.length === 0) return;
 
-    const shuffled = [...this.wordPairs].sort(() => Math.random() - 0.5);
+    const shuffled = ArrayUtils.shuffle(this.wordPairs);
     this.questions = shuffled.map(([w1, w2]) =>
       Math.random() < 0.5
         ? { prompt: w1, answer: w2 }

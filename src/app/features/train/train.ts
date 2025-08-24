@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WordStorageService } from '../../services/word-storage.service';
 import {WordPair} from '../../models/word-pair';
+import {ArrayUtils} from '../../shared/array-utils';
 
 @Component({
   selector: 'app-train',
@@ -34,7 +35,7 @@ export class Train implements OnInit {
       return;
     }
 
-    const index = this.weightedRandomIndex(this.weights);
+    const index = ArrayUtils.weightedRandomIndex(this.weights);
     const [w1, w2] = this.wordPairs[index];
     const dir = Math.random() < 0.5 ? 'L1toL2' : 'L2toL1';
 
@@ -72,15 +73,5 @@ export class Train implements OnInit {
     }
 
     setTimeout(() => this.next(), 1500);
-  }
-
-  weightedRandomIndex(weights: number[]): number {
-    const total = weights.reduce((a, b) => a + b, 0);
-    let rand = Math.random() * total;
-    for (let i = 0; i < weights.length; i++) {
-      rand -= weights[i];
-      if (rand <= 0) return i;
-    }
-    return weights.length - 1; // fallback
   }
 }
