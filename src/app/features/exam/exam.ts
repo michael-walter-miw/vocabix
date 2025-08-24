@@ -1,9 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { WordStorageService } from '../../services/word-storage.service';
+import { UiStateService } from '../../services/ui-state.service';
+
 import { WordPair } from '../../models/word-pair';
 import { Result } from '../../models/result';
 import { ExamQuestion } from '../../models/exam-questions';
@@ -19,24 +21,31 @@ import { MathUtils } from '../../shared/math-utils';
   templateUrl: './exam.html',
   styleUrls: ['./exam.scss']
 })
-export class Exam implements OnInit {
+export class Exam implements OnInit, OnDestroy {
   private readonly storage = inject(WordStorageService);
+  private readonly ui = inject(UiStateService);
   private readonly router = inject(Router);
 
   wordPairs: WordPair[] = [];
   questions: ExamQuestion[] = [];
   results: Result[] = [];
 
-  currentIndex: number = 0;
-  userInput: string = '';
-  finished: boolean = false;
+  currentIndex = 0;
+  userInput = '';
+  finished = false;
 
   ngOnInit(): void {
+    this.ui.startExam(); // 🚨 lock navigation
+
     this.wordPairs = this.storage.load();
     if (this.wordPairs.length === 0) return;
 
     this.questions = ArrayUtils.toShuffledQuestions(this.wordPairs);
-    setTimeout(() => this.focusInput(), 0); // auto-focus
+    setTimeout(() => this.focusInput(), 0);
+  }
+
+  ngOnDestroy(): void {
+    this.ui.endExam(); // ✅ unlock navigation
   }
 
   submit(): void {
@@ -52,8 +61,10 @@ export class Exam implements OnInit {
     this.currentIndex++;
     this.finished = this.currentIndex >= this.questions.length;
 
-    if (!this.finished) {
-      setTimeout(() => this.focusInput(), 0); // re-focus next input
+    if (this.finished) {
+      this.ui.endExam(); // ✅ UNLOCK TABS AFTER EXAM ENDS
+    } else {
+      setTimeout(() => this.focusInput(), 0);
     }
   }
 
@@ -63,10 +74,12 @@ export class Exam implements OnInit {
     this.currentIndex = 0;
     this.userInput = '';
     this.finished = false;
+    this.ui.startExam(); // 🔄 re-lock tabs
     setTimeout(() => this.focusInput(), 0);
   }
 
   back(): void {
+    this.ui.endExam();
     void this.router.navigateByUrl('/edit');
   }
 
