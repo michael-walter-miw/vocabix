@@ -1,66 +1,75 @@
 <div class="exam-container">
   <h2 class="exam-title">📝 Prüfung</h2>
 
-  <div *ngIf="wordPairs.length === 0" class="exam-warning">
-    <div class="alert alert-warning">
-      Keine Wortpaare gefunden. Bitte erfasse zuerst welche unter <a routerLink="/edit">Editieren</a>.
+  @if (wordPairs.length === 0) {
+    <div class="exam-warning">
+      <div class="alert alert-warning">
+        Keine Wortpaare gefunden. Bitte erfasse zuerst welche unter
+        <a routerLink="/edit">Editieren</a>.
+      </div>
     </div>
-  </div>
+  }
 
-  <div *ngIf="!finished && wordPairs.length > 0" class="exam-question-card">
-    <div class="exam-question-header">
-      <strong>Frage {{ currentIndex + 1 }} von {{ questions.length }}:</strong>
+  @if (!finished && wordPairs.length > 0) {
+    <div class="exam-question-card">
+      <div class="exam-question-header">
+        <strong>Frage {{ currentIndex + 1 }} von {{ questions.length }}:</strong>
+      </div>
+
+      <div class="exam-question-prompt">
+        <strong>{{ questions[currentIndex].prompt }}</strong>
+      </div>
+
+      <form (ngSubmit)="submit()">
+        <input
+          class="form-control exam-input"
+          [(ngModel)]="userInput"
+          name="answer"
+          placeholder="Antwort eingeben"
+          required
+        />
+        <button class="btn btn-primary" type="submit">Antwort prüfen</button>
+      </form>
     </div>
+  }
 
-    <div class="exam-question-prompt">
-      <strong>{{ questions[currentIndex].prompt }}</strong>
+  @if (finished) {
+    <div class="exam-results">
+      <h4>📊 Ergebnis</h4>
+      <p>
+        Richtig: <strong>{{ correctCount }}</strong> von {{ total }} |
+        Trefferquote: <strong>{{ percentage }}%</strong>
+      </p>
+
+      <table class="table table-bordered exam-result-table">
+        <thead class="table-light">
+        <tr>
+          <th>Frage</th>
+          <th>Antwort</th>
+          <th>Deine Antwort</th>
+          <th>✓</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (r of results; track r) {
+            <tr>
+              <td>{{ r.question }}</td>
+              <td>{{ r.expected }}</td>
+              <td>{{ r.given }}</td>
+              <td>
+                <span [class.text-success]="r.correct" [class.text-danger]="!r.correct">
+                  {{ r.correct ? '✔️' : '❌' }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+
+      <div class="exam-actions">
+        <button class="btn btn-secondary" (click)="restart()">Neu starten</button>
+        <button class="btn btn-outline-primary" (click)="back()">Zurück zur Erfassung</button>
+      </div>
     </div>
-
-    <form (ngSubmit)="submit()">
-      <input
-        class="form-control exam-input"
-        [(ngModel)]="userInput"
-        name="answer"
-        placeholder="Antwort eingeben"
-        required
-      />
-      <button class="btn btn-primary" type="submit">Antwort prüfen</button>
-    </form>
-  </div>
-
-  <div *ngIf="finished" class="exam-results">
-    <h4>📊 Ergebnis</h4>
-    <p>
-      Richtig: <strong>{{ correctCount }}</strong> von {{ total }} |
-      Trefferquote: <strong>{{ percentage }}%</strong>
-    </p>
-
-    <table class="table table-bordered exam-result-table">
-      <thead class="table-light">
-      <tr>
-        <th>Frage</th>
-        <th>Antwort</th>
-        <th>Deine Antwort</th>
-        <th>✓</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let r of results">
-        <td>{{ r.question }}</td>
-        <td>{{ r.expected }}</td>
-        <td>{{ r.given }}</td>
-        <td>
-            <span [class.text-success]="r.correct" [class.text-danger]="!r.correct">
-              {{ r.correct ? '✔️' : '❌' }}
-            </span>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-
-    <div class="exam-actions">
-      <button class="btn btn-secondary" (click)="restart()">Neu starten</button>
-      <button class="btn btn-outline-primary" (click)="back()">Zurück zur Erfassung</button>
-    </div>
-  </div>
+  }
 </div>
