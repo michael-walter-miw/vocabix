@@ -33,14 +33,16 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let pair of wordPairs; let i = index">
-      <td>{{ pair[0] }}</td>
-      <td>{{ pair[1] }}</td>
-      <td>
-        <button class="btn btn-sm btn-outline-primary" (click)="edit(i)">✏️</button>
-        <button class="btn btn-sm btn-outline-danger" (click)="remove(i)">🗑️</button>
-      </td>
-    </tr>
+      @for (pair of wordPairs; track pair; let i = $index) {
+        <tr>
+          <td>{{ pair[0] }}</td>
+          <td>{{ pair[1] }}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-primary" (click)="edit(i)">✏️</button>
+            <button class="btn btn-sm btn-outline-danger" (click)="remove(i)">🗑️</button>
+          </td>
+        </tr>
+      }
     </tbody>
   </table>
 </div>
