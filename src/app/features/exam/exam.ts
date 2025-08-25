@@ -39,6 +39,8 @@ export class Exam implements OnInit, OnDestroy {
   remainingSeconds: number = 0;
   private timerId: any = null;
 
+  passThreshold = 80; // default: 80%
+
   setDuration(minutes: number): void {
     this.duration = minutes;
   }
@@ -89,6 +91,10 @@ export class Exam implements OnInit, OnDestroy {
       clearInterval(this.timerId);
       this.timerId = null;
     }
+  }
+
+  setPassThreshold(percent: number): void {
+    this.passThreshold = percent;
   }
 
   ngOnDestroy(): void {
